@@ -3,7 +3,7 @@ package com.example.IdarMaps;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Created by Cyzla on 18.05.2015.
+ * Created by Idar Vassdal on 18.05.2015.
  */
 public class Webcamera {
     private String url;

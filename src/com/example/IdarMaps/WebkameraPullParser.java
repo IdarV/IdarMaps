@@ -11,8 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by Cyzla on 18.05.2015.
- * http://developer.android.com/training/basics/network-ops/xml.html
+ * Created by Idar Vassdal on 18.05.2015.
  */
 public class WebkameraPullParser extends AsyncTask<URL, Void, ArrayList<Webcamera>> {
     private static final String ns = null;
@@ -35,10 +34,10 @@ public class WebkameraPullParser extends AsyncTask<URL, Void, ArrayList<Webcamer
     }
 
     public ArrayList<Webcamera> readFeed(XmlPullParser parser) throws IOException, XmlPullParserException {
-        ArrayList<Webcamera> results = new ArrayList<Webcamera>();
+        ArrayList<Webcamera> results = new ArrayList<>();
         Webcamera webcamera = null;
 
-        parser.require(XmlPullParser.START_TAG, ns, "webkameraer");
+        parser.require(XmlPullParser.START_TAG, ns, myActivity.getString(R.string.webkameraer));
         while (parser.next() != XmlPullParser.END_DOCUMENT) {
             String name = parser.getName();
             if (name != null) {
@@ -52,7 +51,7 @@ public class WebkameraPullParser extends AsyncTask<URL, Void, ArrayList<Webcamer
 
     @Override
     protected ArrayList<Webcamera> doInBackground(URL... params) {
-        ArrayList<Webcamera> l = new ArrayList<Webcamera>();
+        ArrayList<Webcamera> l = new ArrayList<>();
         try {
             l = parse(params[0].openStream());
         } catch (XmlPullParserException e) {
@@ -66,7 +65,7 @@ public class WebkameraPullParser extends AsyncTask<URL, Void, ArrayList<Webcamer
     }
 
     private Webcamera saveWebcameraAndCreateNewIfNecessary(Webcamera webcamera, String name, ArrayList<Webcamera> results) {
-        if (name.equalsIgnoreCase("webkamera")) {
+        if (name.equalsIgnoreCase(myActivity.getString(R.string.webkamera))) {
             if (webcamera != null) {
                 webcamera.setLatLng();
                 results.add(webcamera);
@@ -81,31 +80,31 @@ public class WebkameraPullParser extends AsyncTask<URL, Void, ArrayList<Webcamer
         if (webcamera != null) {
             switch (name) {
                 case ("url"):
-                    parser.require(XmlPullParser.START_TAG, ns, "url");
+                    parser.require(XmlPullParser.START_TAG, ns, myActivity.getString(R.string.url));
                     webcamera.setUrl(readText(parser));
                     break;
                 case ("stedsnavn"):
-                    parser.require(XmlPullParser.START_TAG, ns, "stedsnavn");
+                    parser.require(XmlPullParser.START_TAG, ns, myActivity.getString(R.string.stedsnavn));
                     webcamera.setStedsnavn(readText(parser));
                     break;
                 case ("veg"):
-                    parser.require(XmlPullParser.START_TAG, ns, "veg");
+                    parser.require(XmlPullParser.START_TAG, ns, myActivity.getString(R.string.veg));
                     webcamera.setVeg(readText(parser));
                     break;
                 case ("landsdel"):
-                    parser.require(XmlPullParser.START_TAG, ns, "landsdel");
+                    parser.require(XmlPullParser.START_TAG, ns, myActivity.getString(R.string.landsdel));
                     webcamera.setLandsdel(readText(parser));
                     break;
                 case ("lengdegrad"):
-                    parser.require(XmlPullParser.START_TAG, ns, "lengdegrad");
+                    parser.require(XmlPullParser.START_TAG, ns, myActivity.getString(R.string.lengdegrad));
                     webcamera.setLengdegrad(readText(parser));
                     break;
                 case ("breddegrad"):
-                    parser.require(XmlPullParser.START_TAG, ns, "breddegrad");
+                    parser.require(XmlPullParser.START_TAG, ns, myActivity.getString(R.string.breddegrad));
                     webcamera.setBreddegrad(readText(parser));
                     break;
                 case ("info"):
-                    parser.require(XmlPullParser.START_TAG, ns, "info");
+                    parser.require(XmlPullParser.START_TAG, ns, myActivity.getString(R.string.info));
                     webcamera.setInfo(readText(parser));
                     break;
                 default:

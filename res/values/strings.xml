@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TrafficCameras</string>
+    <string name="vegvesenWebkameraMetadata">http://webkamera.vegvesen.no/metadata</string>
+    <string name="googleno">http://google.no</string>
+    <string name="colonspace">", "</string>
+    <string name="webkameraer">webkameraer</string>
+    <string name="webkamera">webkamera</string>
+    <string name="url">url</string>
+    <string name="stedsnavn">stedsnavn</string>
+    <string name="veg">veg</string>
+    <string name="landsdel">landsdel</string>
+    <string name="lengdegrad">lengdegrad</string>
+    <string name="breddegrad">breddegrad</string>
+    <string name="info">info</string>
 </resources>
