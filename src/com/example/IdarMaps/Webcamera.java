@@ -2,8 +2,6 @@ package com.example.IdarMaps;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.net.URL;
-
 /**
  * Created by Cyzla on 18.05.2015.
  */
@@ -17,6 +15,7 @@ public class Webcamera {
     private String lengdegrad;
     private String info;
     private String markerId;
+
     public String getMarkerId() {
         return markerId;
     }

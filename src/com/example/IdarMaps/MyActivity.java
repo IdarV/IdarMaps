@@ -78,10 +78,10 @@ public class MyActivity extends Activity {
                     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 15));
                     for (Webcamera w : webcamerasMyActivity) {
-                        LatLng latLng = w.getLatLng();
-                        String title = w.getStedsnavn() + ", " + w.getVeg();
-                        String info = w.getInfo();
-                        if (latLng != null) {
+                        if (w.getStedsnavn() != null) {
+                            LatLng latLng = w.getLatLng();
+                            String title = w.getStedsnavn() + ", " + w.getVeg();
+                            String info = w.getInfo();
                             Marker me = googleMap.addMarker(new MarkerOptions()
                                     .position(latLng)
                                     .title(title)
@@ -95,9 +95,10 @@ public class MyActivity extends Activity {
                     googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(Marker marker) {
+                            Log.wtf("MARKER", "Marker clicked; id:" + marker.getId() + ". Snippet:" + marker.getId());
                             String url;
-                            url = getUriFromMarkerId(marker);
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()));
+                            url = getUriFromMarkerId(marker.getId());
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                             startActivity(browserIntent);
                         }
                     });
@@ -108,11 +109,12 @@ public class MyActivity extends Activity {
 
     }
 
-    public String getUriFromMarkerId(Marker marker){
-        String id = marker.getId();
-        for(Webcamera w : webcamerasMyActivity){
-            if(w.getMarkerId().equals(id)){
-                return w.getUrl();
+    public String getUriFromMarkerId(String markerId) {
+        for (Webcamera w : webcamerasMyActivity) {
+            if(w.getMarkerId() != null) {
+                if (w.getMarkerId().equals(markerId)) {
+                    return w.getUrl();
+                }
             }
         }
         return "http://google.no";
