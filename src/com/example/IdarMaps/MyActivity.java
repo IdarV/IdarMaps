@@ -22,6 +22,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MyActivity extends Activity {
 
@@ -31,33 +32,33 @@ public class MyActivity extends Activity {
     private Context context;
     private MapFragment map;
     private LocationManager locationManager;
+    public ArrayList<Webcamera> webcamerasMyActivity;
 
     /**
      * Called when the activity is first created.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("onCreate", "onCreate");
         super.onCreate(savedInstanceState);
-        context = this;
         setContentView(R.layout.main);
+        context = this;
+        webcamerasMyActivity = new ArrayList<Webcamera>();
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map));
 
         /**
          * TEST
          */
-        new Thread() {
-            @Override
-            public void run() {
-                WebkameraPullParser w = new WebkameraPullParser();
-                try {
-                    w.execute(new URL("http://webkamera.vegvesen.no/metadata"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.run();
+        WebkameraPullParser w = new WebkameraPullParser(this);
+        try {
+             w.execute(new URL("http://webkamera.vegvesen.no/metadata"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+
+    }
+
+    public void setRandomCoord(LatLng latLng){
         map.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -66,11 +67,10 @@ public class MyActivity extends Activity {
                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 LatLng currentPosition;
-                if(location != null){
+                if (location != null) {
                     Log.d("onMapReady", "Location is not null : " + location.toString());
-                    currentPosition = new LatLng(location.getLatitude(),location.getLongitude());
-                }
-                else{
+                    currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
+                } else {
                     Log.d("onMapReady", "Location is null");
                     currentPosition = KIEL;
 
@@ -79,9 +79,9 @@ public class MyActivity extends Activity {
                 if (map != null) {
                     googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                     Marker me = googleMap.addMarker(new MarkerOptions()
-                            .position(currentPosition)
-                            .title("Her er jeg!")
-                            .snippet("Hei hei!"));
+                            .position(latLng)
+                            .title("Her er et kamera")
+                            .snippet("Kamera!"));
 
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 15));
                     //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 4000, null);
@@ -89,15 +89,6 @@ public class MyActivity extends Activity {
 
             }
         });
-    }
-
-    public LatLng locationToLatLng(Location location){
-        if(location == null){
-            return KIEL;
-        }
-
-        return new LatLng(location.getLatitude(), location.getLongitude());
-
     }
 
 }
