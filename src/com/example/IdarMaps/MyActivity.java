@@ -8,6 +8,9 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -29,7 +32,9 @@ public class MyActivity extends Activity {
     private Context context;
     private MapFragment map;
     private LocationManager locationManager;
+    private LinearLayout loadingInformation;
     public ArrayList<Webcamera> webcamerasMyActivity;
+
 
     /**
      * Called when the activity is first created.
@@ -39,8 +44,9 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         context = this;
+        loadingInformation = (LinearLayout) findViewById(R.id.loadingInformation);
+        loadingInformation.setVisibility(View.VISIBLE);
         webcamerasMyActivity = new ArrayList<Webcamera>();
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map));
 
         /**
          * TEST
@@ -58,6 +64,7 @@ public class MyActivity extends Activity {
     }
 
     public void setCoords() {
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map));
         map.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -107,6 +114,7 @@ public class MyActivity extends Activity {
             }
         });
 
+        loadingInformation.setVisibility(View.GONE);
     }
 
     public String getUriFromMarkerId(String markerId) {
