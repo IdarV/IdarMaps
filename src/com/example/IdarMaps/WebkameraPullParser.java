@@ -43,17 +43,13 @@ public class WebkameraPullParser extends AsyncTask<URL, Void, ArrayList<Webcamer
         ArrayList<Webcamera> results = new ArrayList<Webcamera>();
         Webcamera webcamera = null;
         parser.require(XmlPullParser.START_TAG, ns, "webkameraer");
-        int i = 0;
+        long start = System.currentTimeMillis();
         while (parser.next() != XmlPullParser.END_DOCUMENT) {
-
-          /*  if(parser.getEventType() != XmlPullParser.START_TAG){
-                continue;
-            }*/
             String name = parser.getName();
             if (name != null) {
-                i++;
                 if (name.equalsIgnoreCase("webkamera")) {
                     if (webcamera != null) {
+                        webcamera.setLatLng();
                         results.add(webcamera);
                     }
                     webcamera = new Webcamera();
@@ -62,41 +58,39 @@ public class WebkameraPullParser extends AsyncTask<URL, Void, ArrayList<Webcamer
                     if (name.equalsIgnoreCase("url")) {
                         parser.require(XmlPullParser.START_TAG, ns, "url");
                         String url = readText(parser);
-                        Log.wtf("Parserino", "URL : " + url);
-                        webcamera.setUrl(new URL(url));
+                        webcamera.setUrl(url);
                         parser.require(XmlPullParser.END_TAG, ns, "url");
                     } else if (name.equalsIgnoreCase("stedsnavn")) {
                         parser.require(XmlPullParser.START_TAG, ns, "stedsnavn");
                         String stedsnavn = readText(parser);
-                        Log.wtf("Parserino", "Stedsnavn: " + stedsnavn);
                         webcamera.setStedsnavn(stedsnavn);
                     } else if (name.equalsIgnoreCase("veg")) {
                         parser.require(XmlPullParser.START_TAG, ns, "veg");
                         String veg = readText(parser);
                         webcamera.setVeg(veg);
-                        Log.wtf("Parserino", "veg: " + veg);
                     } else if (name.equalsIgnoreCase("landsdel")) {
                         parser.require(XmlPullParser.START_TAG, ns, "landsdel");
                         String landsdel = readText(parser);
                         webcamera.setLandsdel(landsdel);
-                        Log.wtf("Parserino", "landsdel: " + landsdel);
                     } else if (name.equalsIgnoreCase("lengdegrad")) {
                         parser.require(XmlPullParser.START_TAG, ns, "lengdegrad");
                         String lengdegrad = readText(parser);
                         webcamera.setLengdegrad(lengdegrad);
-                        Log.wtf("Parserino", "lengdegrad: " + lengdegrad);
                     } else if (name.equalsIgnoreCase("breddegrad")) {
                         parser.require(XmlPullParser.START_TAG, ns, "breddegrad");
                         String breddegrad = readText(parser);
                         webcamera.setBreddegrad(breddegrad);
-                        Log.wtf("Parserino", "breddegrad: " + breddegrad);
+                    } else if(name.equalsIgnoreCase("info")) {
+                        parser.require(XmlPullParser.START_TAG, ns, "info");
+                        String info = "" + readText(parser);
+                        webcamera.setInfo(info);
                     }
                 }
 
             }
 
         }
-
+        Log.wtf("Parser", "Time to read all data: " + ((System.currentTimeMillis() - start)) + " ms.");
         return results;
     }
 
@@ -128,6 +122,6 @@ public class WebkameraPullParser extends AsyncTask<URL, Void, ArrayList<Webcamer
     protected void onPostExecute(ArrayList<Webcamera> webcameras) {
         myActivity.webcamerasMyActivity.clear();
         myActivity.webcamerasMyActivity.addAll(webcameras);
-        myActivity.setRandomCoord(myActivity.webcamerasMyActivity.get(0).getLatLng());
+        myActivity.setCoords();
     }
 }

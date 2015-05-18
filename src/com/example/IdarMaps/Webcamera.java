@@ -8,22 +8,40 @@ import java.net.URL;
  * Created by Cyzla on 18.05.2015.
  */
 public class Webcamera {
-    private URL url;
+    private String url;
+    private LatLng latLng;
     private String stedsnavn;
     private String veg;
     private String landsdel;
     private String breddegrad;
     private String lengdegrad;
+    private String info;
+    private String markerId;
+    public String getMarkerId() {
+        return markerId;
+    }
 
-    public URL getUrl() {
+    public void setMarkerId(String markerId) {
+        this.markerId = markerId;
+    }
+
+    public String getUrl() {
         return url;
     }
 
-    public LatLng getLatLng(){
-        return new LatLng(Double.parseDouble(breddegrad), Double.parseDouble(lengdegrad));
+    public void setLatLng() {
+        if (breddegrad == null || lengdegrad == null) {
+            latLng = new LatLng(0, 0);
+        } else {
+            latLng = new LatLng(Double.parseDouble(breddegrad), Double.parseDouble(lengdegrad));
+        }
     }
 
-    public void setUrl(URL url) {
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setUrl(String url) {
         this.url = url;
     }
 
@@ -57,6 +75,14 @@ public class Webcamera {
 
     public void setBreddegrad(String breddegrad) {
         this.breddegrad = breddegrad;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getInfo() {
+        return info;
     }
 
     public String getLengdegrad() {
