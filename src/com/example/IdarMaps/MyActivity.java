@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Xml;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -16,24 +17,46 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class MyActivity extends Activity {
-    /**
-     * Called when the activity is first created.
-     */
 
     static final LatLng HAMBURG = new LatLng(53.558, 9.927);
     static final LatLng KIEL = new LatLng(53.551, 9.993);
     static final LatLng OSLO = new LatLng(59.9500, 10.7500);
+    private Context context;
     private MapFragment map;
     private LocationManager locationManager;
 
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("onCreate", "onCreate");
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.main);
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map));
+
+        /**
+         * TEST
+         */
+        new Thread() {
+            @Override
+            public void run() {
+                WebkameraPullParser w = new WebkameraPullParser();
+                try {
+                    w.execute(new URL("http://webkamera.vegvesen.no/metadata"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.run();
 
         map.getMapAsync(new OnMapReadyCallback() {
             @Override
